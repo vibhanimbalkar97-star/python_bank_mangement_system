@@ -1,5 +1,7 @@
 from pathlib import Path
 import json
+import random
+import string
 
 class Bank:
    # create dummy data
@@ -16,18 +18,27 @@ class Bank:
    except Exception as err:
       print(f"An error occurred as {err}")
 
-      @classmethod
-      def __update(cls):
-         with open(cls.database, "w") as fs:
-            fs.write(json.dumps(Bank.data))
+   @classmethod
+   def __update(cls):
+      with open(cls.database, "w") as fs:
+         fs.write(json.dumps(Bank.data))
 
+   @classmethod
+   def __generateaccountnum(cls):
+      alpha = random.choices(string.ascii_letters, k=3)
+      num = random.choices(string.digits, k=3)
+      spchar = random.choices("!@#$%^&*", k=1)
+      id = alpha + num + spchar
+      random.shuffle(id)
+      return "".join(id)
+      
    def createaccount(self):
       info = {
          "name": input("Tell your name:- "),
          "age": int(input("Tell your age:- ")),
          "email": input("Tell your email:- "),
          "pin": int(input("Tell your 4 number pin:- ")),
-         "accountnumber": 1234,
+         "accountnumber": Bank.__generateaccountnum(),
          "balance": 0
       }
       if info["age"] < 18 or len(str(info["pin"])) != 4:
