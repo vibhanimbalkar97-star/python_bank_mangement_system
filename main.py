@@ -102,9 +102,13 @@ class Bank:
 
       if not user:
          return False,"Invalid acc number or PIN"
+   
+      print("\n----- Account Details -----")
       
-      for details in user:
-         print(f"{details} : {user[details]}")
+      for key, value in user.items():
+         if key == "pin":
+            continue
+         print(f"{key} : {value}")
       return True, "Details fetched successfully"
 
    
@@ -224,4 +228,7 @@ elif check == 6:
 
    message = Bank.delete_details(acc_no, pin)
    print(message)
+
+else:
+   print("Enter the wrong check")
       
