@@ -57,6 +57,29 @@ class Bank:
       data.append(user)
       cls.__save_data(data)   
       return user, "Account created successfully" 
+   
+   @classmethod
+   def find_user(cls, data, acc_no, pin):
+      for user in data:
+         if user["acc_no"] == acc_no and user["pin"] == pin:
+            return user
+      return None
+   
+   @classmethod
+   def deposit(cls, acc_no, pin, amount):
+      data = cls.__load_data()
+      user = cls.find_user(data, acc_no, pin)
+
+      if not user:
+         return "Invalid account number or PIN"
+      
+      if amount <=0 or amount > 10000:
+         return "Amount must be between 1 to 10000"
+      
+      user["balance"]+=amount
+      cls.__save_data(data)
+      return "Deposit successful"
+
             
 
 print("Press 1 for creating an account:- ")
@@ -74,16 +97,13 @@ if check == 1:
    email = input("Enter your email: ")
    pin = int(input("Enter 4-digit PIN: "))
 
-   user, message = Bank.create_account(name, age, email, pin)
+   message = Bank.create_account(name, age, email, pin)
    print(message)
-   print(user)
 
 elif check == 2:
-   acc_no = input("Enter your account number")
-   pin = int(input("Enter your pin"))
+   acc_no = input("Enter account number:- ")
+   pin = int(input("Enter pin:- "))
+   amount = int(input("Enter amount:- "))
 
- 
-
-
-
-
+   message = Bank.deposit(acc_no, pin, amount)
+   print(message)
