@@ -94,8 +94,22 @@ class Bank:
       user["balance"] -= amount
       cls.__save_data(data)
       return "Withdrawn sucessful"
+   
+   @classmethod
+   def show_details(cls, acc_no, pin):
+      data = cls.__load_data()
+      user = cls.find_user(data, acc_no, pin)
 
-            
+      if not user:
+         return "Invalid acc number or PIN"
+      
+      for details in user:
+         print(f"{details} : {user[details]}")
+      return "Details fetched successfully"
+
+   
+
+
 
 print("Press 1 for creating an account:- ")
 print("Press 2 for depositing money in the bank:- ")
@@ -129,4 +143,11 @@ elif check == 3:
    amount = int(input("Enter amount:- "))
 
    message = Bank.withdraw(acc_no, pin, amount)
+   print(message)
+
+elif check == 4:
+   acc_no = input("Enter account number:- ")
+   pin = int(input("Enter pin:- "))
+
+   message = Bank.show_details(acc_no, pin)
    print(message)
