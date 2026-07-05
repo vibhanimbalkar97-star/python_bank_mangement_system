@@ -79,6 +79,21 @@ class Bank:
       user["balance"]+=amount
       cls.__save_data(data)
       return "Deposit successful"
+   
+   @classmethod
+   def withdraw(cls, acc_no, pin, amount):
+      data = cls.__load_data()
+      user = cls.find_user(data,acc_no, pin)
+
+      if not user:
+         return "Invalid acc number or PIN"
+      
+      if amount <= 0 or user["balance"] < amount:
+         return "Amount is more than available balance or negative value"
+      
+      user["balance"] -= amount
+      cls.__save_data(data)
+      return "Withdrawn sucessful"
 
             
 
@@ -106,4 +121,12 @@ elif check == 2:
    amount = int(input("Enter amount:- "))
 
    message = Bank.deposit(acc_no, pin, amount)
+   print(message)
+
+elif check == 3:
+   acc_no = input("Enter account number:- ")
+   pin = int(input("Enter pin:- "))
+   amount = int(input("Enter amount:- "))
+
+   message = Bank.withdraw(acc_no, pin, amount)
    print(message)
