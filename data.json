@@ -1,10 +1,10 @@
 [
     {
-        "name": "karan",
+        "name": "Karan",
         "age": 35,
         "email": "karan@gmail.com",
         "acc_no": "5N!0v5G",
-        "pin": 1234,
+        "pin": 5678,
         "balance": 1000
     }
 ]

@@ -71,14 +71,14 @@ class Bank:
       user = cls.find_user(data, acc_no, pin)
 
       if not user:
-         return "Invalid account number or PIN"
+         return False,"Invalid account number or PIN"
       
       if amount <=0 or amount > 10000:
-         return "Amount must be between 1 to 10000"
+         return False,"Amount must be between 1 to 10000"
       
       user["balance"]+=amount
       cls.__save_data(data)
-      return "Deposit successful"
+      return True,"Deposit successful"
    
    @classmethod
    def withdraw(cls, acc_no, pin, amount):
@@ -86,14 +86,14 @@ class Bank:
       user = cls.find_user(data,acc_no, pin)
 
       if not user:
-         return "Invalid acc number or PIN"
+         return False, "Invalid acc number or PIN"
       
       if amount <= 0 or user["balance"] < amount:
-         return "Amount is more than available balance or negative value"
+         return False, "Amount is more than available balance or negative value"
       
       user["balance"] -= amount
       cls.__save_data(data)
-      return "Withdrawn sucessful"
+      return True, "Withdrawn sucessful"
    
    @classmethod
    def show_details(cls, acc_no, pin):
@@ -101,13 +101,28 @@ class Bank:
       user = cls.find_user(data, acc_no, pin)
 
       if not user:
-         return "Invalid acc number or PIN"
+         return False,"Invalid acc number or PIN"
       
       for details in user:
          print(f"{details} : {user[details]}")
-      return "Details fetched successfully"
+      return True, "Details fetched successfully"
 
    
+   @classmethod
+   def update_details(cls, acc_no, pin, name=None, email=None, new_pin=None):
+      data = cls.__load_data()
+      user = cls.find_user(data, acc_no, pin)
+
+      if not user:
+         return False, "Invalid account number or PIN"
+      
+      user["name"] = name
+      user["email"] = email
+      user["pin"] = new_pin
+
+      cls.__save_data(data)
+      return True, "Details updated successfully"
+      
 
 
 
@@ -151,3 +166,43 @@ elif check == 4:
 
    message = Bank.show_details(acc_no, pin)
    print(message)
+
+elif check == 5:
+   acc_no = input("Enter account number:- ")
+   pin = int(input("Enter account pin:- "))
+
+   data = Bank._Bank__load_data()
+   user = Bank.find_user(data, acc_no, pin)
+
+   if not user:
+      print("Invalid account number or PIN")
+   else:
+      print("\nCurrent details")
+      print("------------------------")
+      print(f"Name : {user["name"]}")
+      print(f"Email : {user["email"]}")
+      print(f"Pin : {user["pin"]}")
+
+      print("\nPress Enter to keep the current values ")
+
+      name = input(f"New name ({user["name"]})")
+      if name == "":
+         name = user["name"]
+
+      email = input(f"New email ({user["email"]})")
+      if email == "":
+         email = user["email"]
+
+      pin_input = input("New PIN (Press Enter to keep current)")
+      if pin_input == "":
+         new_pin = user['pin']
+      else:
+         new_pin = int(pin_input)
+
+         if len(str(new_pin)) != 4:
+            print("PIN must be 4 digits")
+            exit()
+
+      success, message = Bank.update_details(acc_no, pin, name, email, new_pin)
+      print(message)
+      
