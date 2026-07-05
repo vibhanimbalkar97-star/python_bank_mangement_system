@@ -123,7 +123,19 @@ class Bank:
       cls.__save_data(data)
       return True, "Details updated successfully"
       
+   @classmethod
+   def delete_details(cls, acc_no, pin):
+      data = cls.__load_data()
+      user = cls.find_user(data, acc_no, pin)
+      print(user)
+      print(data)
 
+      if not user:
+         return False, "Invalid account number or PIN"
+
+      data.remove(user)
+      cls.__save_data(data)
+      return True, "Account deleted" 
 
 
 print("Press 1 for creating an account:- ")
@@ -205,4 +217,11 @@ elif check == 5:
 
       success, message = Bank.update_details(acc_no, pin, name, email, new_pin)
       print(message)
+
+elif check == 6:
+   acc_no = input("Enter account number:- ")
+   pin = int(input("Enter pin:- "))
+
+   message = Bank.delete_details(acc_no, pin)
+   print(message)
       
